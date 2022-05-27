@@ -1,25 +1,6 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+@import "base";
 
-:root {
-  --pink: #F92670;
-  --yellow: #DCDA42;
-  --lime: #B2E30A;
-  --teal: #39B6B0;
-  --green: #486D5F;
-}
-body{
-  height: 100vh;
-}
-a{
-  text-decoration: none;
-  color: black;
-  background-color: #e4e5e5;
-}
-.main{
+.main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,12 +10,13 @@ a{
   height: 100%;
 
 
-  .option-container{
+  .option-container {
     display: flex;
     flex-direction: column;
     width: 70%;
     margin-top: 1rem;
-    .home-btn{
+
+    .home-btn {
       width: 100%;
       height: auto;
       cursor: pointer;
@@ -46,6 +28,80 @@ a{
       padding: 8% 5%;
       margin-top: .5rem;
       margin-bottom: .5rem;
+      background-color: #fa4b88;
+      color: white;
+
+      &:hover {
+        background-color: var(--pink);
+      }
     }
+  }
+}
+
+.opts-modal {
+  //background-color: #486D5F;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  .game-options {
+
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(25%, 1fr) minmax(50%, 1fr) minmax(25%, 1fr);
+    grid-template-rows:  auto 1fr;
+    grid-template-areas:
+            "title title title"
+            "left options right";
+    text-align: center;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    place-items: center;
+
+    .title {
+      //padding-top: 5%;
+      //padding-bottom: 2%;
+      grid-column: title;
+    }
+    .arrow{
+      cursor: pointer;
+      height: 1.5rem;
+
+
+      &.left{
+        grid-column: left;
+
+      }
+      &.right{
+        grid-column: right;
+      }
+    }
+
+    .difficulty-opts, .theme-opts {
+      cursor: none;
+      pointer-events: none;
+      grid-column: options;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      .lv-opt, .theme-opt {
+        display: none;
+
+        &.show {
+          display: block;
+        }
+      }
+    }
+
   }
 }

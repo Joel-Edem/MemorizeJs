@@ -22,6 +22,61 @@ a {
   background-color: #e4e5e5;
 }
 
+#modal-base {
+  position: relative;
+}
+#modal-base .modal {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+#modal-base .modal .modal-content {
+  background-color: #fefefe;
+  border: 1px solid #888;
+  width: 70%;
+  /* Could be more or less, depending on screen size */
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+#modal-base .modal .modal-content .close {
+  margin: 15px;
+  align-self: end;
+  width: 30px;
+  height: 30px;
+  color: #fefefe;
+  border: none;
+  border-radius: 5px;
+  background-color: red;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 300ms ease-in-out;
+}
+#modal-base .modal .modal-content .close:hover, #modal-base .modal .modal-content .close:focus {
+  color: white;
+  width: 33px;
+  height: 33px;
+  font-size: 25px;
+  text-decoration: none;
+  cursor: pointer;
+}
+#modal-base .modal .modal-content .modal-body {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -49,6 +104,64 @@ a {
   padding: 8% 5%;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  background-color: #fa4b88;
+  color: white;
+}
+.main .option-container .home-btn:hover {
+  background-color: var(--pink);
+}
+
+.opts-modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.opts-modal .game-options {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(25%, 1fr) minmax(50%, 1fr) minmax(25%, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "title title title" "left options right";
+  text-align: center;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  place-items: center;
+}
+.opts-modal .game-options .title {
+  grid-column: title;
+}
+.opts-modal .game-options .arrow {
+  cursor: pointer;
+  height: 1.5rem;
+}
+.opts-modal .game-options .arrow.left {
+  grid-column: left;
+}
+.opts-modal .game-options .arrow.right {
+  grid-column: right;
+}
+.opts-modal .game-options .difficulty-opts, .opts-modal .game-options .theme-opts {
+  cursor: none;
+  pointer-events: none;
+  grid-column: options;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.opts-modal .game-options .difficulty-opts .lv-opt, .opts-modal .game-options .difficulty-opts .theme-opt, .opts-modal .game-options .theme-opts .lv-opt, .opts-modal .game-options .theme-opts .theme-opt {
+  display: none;
+}
+.opts-modal .game-options .difficulty-opts .lv-opt.show, .opts-modal .game-options .difficulty-opts .theme-opt.show, .opts-modal .game-options .theme-opts .lv-opt.show, .opts-modal .game-options .theme-opts .theme-opt.show {
+  display: block;
 }
 
 /*# sourceMappingURL=main.css.map */

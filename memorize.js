@@ -1,19 +1,47 @@
 window.addEventListener('load', () => {
+  let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 0)
+  let THEME = JSON.parse(localStorage.getItem("THEME") || 0)
   let GAME_BOARD = document.querySelector("#game-board")
   const SCORE_CARD = document.querySelector("#score-card")
   const MODAL_BASE = document.querySelector("#modal-base")
   const RESTART_BTN = document.querySelector("#restart-btn")
-  const EMOJIS = [
-    // "🇦🇪", "🇦🇫", "🇦🇬", "🇦🇮", "🇦🇱", "🇦🇲", "🇦🇴", "🇦🇶", "🇦🇷",
-    "🇦🇸", "🇦🇹", "🇦🇺", "🇦🇼", "🇦🇽", "🇦🇿", "🇧🇦", "🇧🇧",
-  ]
+  const OPTIONS = {
+    themes: {
+      0: {
+        name: "Flags", emojis: [
+          "🇦🇪", "🇦🇫", "🇦🇬", "🇦🇮", "🇦🇱", "🇦🇲", "🇦🇴", "🇦🇶", "🇦🇷",
+          "🇦🇸", "🇦🇹", "🇦🇺", "🇦🇼", "🇦🇽", "🇦🇿", "🇧🇦", "🇧🇧",]
+      },
+      1: {
+        name: "Halloween",
+        emojis: [
+          "🦇", "🦉", "🪲", "🪳", "🕷", "👺", "👻", "👽", "💀", "☠", "🤡",
+          "🕸", "🪱", "🥀", "🍫", "🕯", "🗡", "⛓", "🩸", "⚰", "🪦", "⚱", "👹",
+        ]
+      },
+      2: {
+        name: "Vehicles", emojis: [
+          "✈️", "🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🛳", "🛩", "🚇", "🚆",
+          "🚚", "🚛", "🚜", "🚔", "🛵", "🚲", "🛴", "🦼", "🦯", "🛺", "✈️", "🚀", "🛸", "🚢", "⛴", "🛥", "🚠" ]
+      }
+    },
+    level_options: {
+    0: {name: "Easy", className: "easy", numCards:8},
+    1: {name: "Medium", className: "medium", numCards: 10},
+    2: {name: "Hard", className: "hard", numCards:12}
+  }
+  }
+
+  let EMOJIS = []
+
   let CARDS = {};
   let SELECTED = []
   let SCORE = 0
 
+  console.log(LEVEL, THEME)
   const start = () => {
     // shuffleArray(emojis) // shuffle emoji
-    GAME_BOARD.classList.add("easy") // todo change difficulties
+    GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className) // todo change difficulties
     SCORE = 0
     updateScore(0)
     const card_els = createCards()
@@ -122,6 +150,10 @@ window.addEventListener('load', () => {
   }
 
   const createCards = (faceUp = false) => {
+    //shuffle cards and choose num according to level
+    shuffleArray(OPTIONS.themes[THEME].emojis)
+    EMOJIS = OPTIONS.themes[THEME].emojis.slice(0, OPTIONS.level_options[LEVEL].numCards)
+    console.log(OPTIONS.level_options[LEVEL].numCards-1)
     const els = []
     EMOJIS.forEach((emoji) => {//create cards
       for (let i = 0; i < 2; i++) {
@@ -137,6 +169,7 @@ window.addEventListener('load', () => {
     return els
   }
 
+  // noinspection DuplicatedCode
   const createModal = (innerHTML, ignoreOutsideClick = false) => {
     const modal = document.createElement("div")
     modal.classList.add("modal")
