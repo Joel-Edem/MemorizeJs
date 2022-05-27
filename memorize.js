@@ -22,23 +22,24 @@ window.addEventListener('load', () => {
       2: {
         name: "Vehicles", emojis: [
           "✈️", "🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🛳", "🛩", "🚇", "🚆",
-          "🚚", "🚛", "🚜", "🚔", "🛵", "🚲", "🛴", "🦼", "🦯", "🛺", "✈️", "🚀", "🛸", "🚢", "⛴", "🛥", "🚠" ]
+          "🚚", "🚛", "🚜", "🚔", "🛵", "🚲", "🛴", "🦼", "🦯", "🛺", "✈️", "🚀", "🛸", "🚢", "⛴", "🛥", "🚠"]
       }
     },
     level_options: {
-    0: {name: "Easy", className: "easy", numCards:8},
-    1: {name: "Medium", className: "medium", numCards: 10},
-    2: {name: "Hard", className: "hard", numCards:12}
-  }
+      0: {name: "Easy", className: "easy", numCards: 8},
+      1: {name: "Medium", className: "medium", numCards: 10},
+      2: {name: "Hard", className: "hard", numCards: 12}
+    }
   }
 
+  //GAME STATE
   let EMOJIS = []
-
   let CARDS = {};
   let SELECTED = []
   let SCORE = 0
+  let NAME = ""
 
-  console.log(LEVEL, THEME)
+
   const start = () => {
     // shuffleArray(emojis) // shuffle emoji
     GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className) // todo change difficulties
@@ -52,7 +53,7 @@ window.addEventListener('load', () => {
       CARDS[`${id}`] = card
       GAME_BOARD.appendChild(card.el)
     })
-
+    // showHighScoreUserModal()
   }
 
   const checkGameOver = () => {
@@ -89,7 +90,48 @@ window.addEventListener('load', () => {
   const handleGameOver = () => {
     // save score if high score
     // SHOW MODAL
-    showGameOverModal()
+    if (hasHighScore()) {
+      showHighScoreUserModal(showGameOverModal)
+    } else {
+      showGameOverModal()
+    }
+  }
+
+
+  const showHighScoreUserModal = (onClose = null) => {
+    const innerHtml = `
+    <form id="get-user-name-form">
+     <p class="">New High Score</p>
+     <div class="form-body">
+        <label for="user-name">Name</label>
+        <input name="user-name" id="user-name" placeholder="Enter your name">
+     </div>
+    
+    <button name="user-form-submit" type="submit" class="btn submit" id="user-form-btn">
+        Submit
+    </button>
+    </form>
+    `
+    const {open, modal, close} = createModal(innerHtml, true, onClose)
+    modal.querySelector("#user-form-btn").addEventListener('click',
+      (e) => {
+        e.preventDefault()
+        const res = handleHighScoreFormSubmit()
+        if (res) close();
+
+      })
+    open()
+  }
+
+  const handleHighScoreFormSubmit = () => {
+    const el = document.querySelector("#user-name")
+    NAME = el.value
+    console.log(NAME)
+    if (!NAME) return false
+    el.value = ""
+    setHighScore(NAME)
+    return true
+
   }
 
   const restart = () => {
@@ -100,6 +142,7 @@ window.addEventListener('load', () => {
     })
     // empty cards ,
     CARDS = {}
+    NAME = ""
     // EMPTY selected
     SELECTED = []
     // CLEAR SCORE
@@ -153,7 +196,7 @@ window.addEventListener('load', () => {
     //shuffle cards and choose num according to level
     shuffleArray(OPTIONS.themes[THEME].emojis)
     EMOJIS = OPTIONS.themes[THEME].emojis.slice(0, OPTIONS.level_options[LEVEL].numCards)
-    console.log(OPTIONS.level_options[LEVEL].numCards-1)
+    console.log(OPTIONS.level_options[LEVEL].numCards - 1)
     const els = []
     EMOJIS.forEach((emoji) => {//create cards
       for (let i = 0; i < 2; i++) {
@@ -170,7 +213,7 @@ window.addEventListener('load', () => {
   }
 
   // noinspection DuplicatedCode
-  const createModal = (innerHTML, ignoreOutsideClick = false) => {
+  const createModal = (innerHTML, ignoreOutsideClick = false, onClose = null) => {
     const modal = document.createElement("div")
     modal.classList.add("modal")
     modal.innerHTML = `
@@ -187,11 +230,15 @@ window.addEventListener('load', () => {
       modal.classList.add("open")
     }
     const handleClose = () => {
+
       modal.classList.remove('open')
       modal.remove()
+      if (onClose) {
+        onClose()
+      }
     }
 
-
+    // noinspection DuplicatedCode
     const handleOutsideClick = (e) => {
       if (ignoreOutsideClick) return;
       if (e.target === modal && modal.classList.contains('open')) {
@@ -209,7 +256,8 @@ window.addEventListener('load', () => {
   const showGameOverModal = () => {
     const innerHtml = `
     <div class="game-over-modal">
-      <h3 class="title">Game Complete<br/>Woohoo!</h3>
+      <h3 class="title">Game Complete</h3>
+      ${hasHighScore() ? '<p class="body">You got a high score</p>' : ""}
       <p class="body">Your score was</p>
       <h2 class="score">${SCORE}</h2>
       <div class="btn-box">
@@ -219,12 +267,59 @@ window.addEventListener('load', () => {
     </div>
     `
     // todo add form to track high scores
-    const {open, modal} = createModal(innerHtml)
+
+    const {open, modal, close} = createModal(innerHtml)
     modal.querySelector('.restart-btn')
-      .addEventListener('click', restart)
+      .addEventListener('click', ()=>{
+        close()
+        restart()})
     open()
   }
 
+  const hasHighScore = () => {
+    //{score: int, name:str}
+    const highScores = JSON.parse(localStorage.getItem("HIGH_SCORES")) || []
+    if (!SCORE) return false;
+    if (highScores.length < 10) {
+      return true
+    }
+    return getHighScoreIndex(highScores) !== null
+
+
+    // when game ends get scores from storage ,
+    // check if current score matches . if has high score ,
+    // show modal to enter high score,
+  }
+
+  const getHighScoreIndex = (highScores) => {
+    let newHighScoreIdx = null;
+    // find index of high score
+    if (!highScores.length) return 0;
+
+    for (let i = 0; i < highScores.length; i++) {
+      if (SCORE >= highScores[i].score) {
+        newHighScoreIdx = i;
+        for (let j = i + 1; j < highScores.length; j++) {
+          if (highScores[j].score === highScores[i].score) {
+            newHighScoreIdx = j
+          } else {
+            break
+          }
+        }
+        break
+      }
+    }
+
+    return newHighScoreIdx
+  }
+
+  const setHighScore = (name) => {
+    const highScores = JSON.parse(localStorage.getItem("HIGH_SCORES")) || []
+    const highScoreIdx = getHighScoreIndex(highScores)
+    highScores.splice(highScoreIdx, 0, {name: name, score: SCORE})
+    if (highScores.length > 10) highScores.pop();
+    localStorage.setItem("HIGH_SCORES", JSON.stringify(highScores))
+  }
   RESTART_BTN.addEventListener("click", restart)
 
   function shuffleArray(array) {
@@ -235,5 +330,6 @@ window.addEventListener('load', () => {
   }
 
   start()
+
 })
 
