@@ -60,7 +60,7 @@ window.addEventListener('load', () => {
     
       <div class="level-opt-container game-options">
         <h5 class="title">Difficulty</h5>
-            <img class="left arrow" src="imgs/left-chevron.svg" alt="left arrow"/>
+            <img class="left arrow" src="../imgs/left-chevron.svg" alt="left arrow"/>
         <div class="difficulty-opts">
             ${Object.keys(LEVEL_OPTIONS).map((key) => {
       return `
@@ -69,12 +69,12 @@ window.addEventListener('load', () => {
                 </p>`
     }).join(" ")}
         </div>
-            <img src="imgs/right-chevron.svg" class="right arrow" alt="right arrow"/>
+            <img src="../imgs/right-chevron.svg" class="right arrow" alt="right arrow"/>
       </div>
       
       <div class="theme-opt-container game-options">
         <h5 class="title">Theme</h5>
-        <img class="left arrow" src="imgs/left-chevron.svg" alt="left arrow"/>
+        <img class="left arrow" src="../imgs/left-chevron.svg" alt="left arrow"/>
         <div class="theme-opts">
             ${Object.keys(THEME_OPTIONS).map((key) => {
       return ` <p class="theme-opt ${key === `${THEME}` ? "show" : ''}" id="theme-${key}-opt">${THEME_OPTIONS[key].name}
@@ -82,7 +82,7 @@ window.addEventListener('load', () => {
                 </p>`
     }).join("")}
         </div>
-        <img class="right arrow" src="imgs/right-chevron.svg" alt="right arrow"/>
+        <img class="right arrow" src="../imgs/right-chevron.svg" alt="right arrow"/>
       </div>
     </div>  
     `

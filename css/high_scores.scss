@@ -1,0 +1,68 @@
+@import "base";
+
+.page-content {
+  display: flex;
+  height: 100%;
+  //width: 100%;
+  margin-left: 10%;
+  margin-right: 10%;
+  flex-direction: column;
+  padding-top: 100px;
+
+  .page-title {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+
+  .btn {
+    border: none;
+    max-width: 95px;
+    text-align: center;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    color: white;
+    background-color: var(--pink);
+    transition: all 300ms ease-in-out;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    &:hover {
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+      transform: scale(1.05);
+    }
+
+  }
+  #high-scores{
+    width: 100%;
+    //height: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    .heading{
+      display: grid;
+      grid-template-columns: 20% 60% 20%;
+      padding-bottom: 3px;
+      border-bottom: 2px solid #486D5F;
+      text-align: center;
+    }
+    .high-score-entry{
+      display: grid;
+      grid-template-columns: 20% 60% 20%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      .score-rank{text-align: center}
+      .score-name{text-align: center}
+      .score-points{text-align: center}
+
+      //justify-content: space-evenly;
+    }
+  }
+}

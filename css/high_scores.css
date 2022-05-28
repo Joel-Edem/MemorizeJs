@@ -1,0 +1,143 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --pink: #F92670;
+  --yellow: #DCDA42;
+  --lime: #B2E30A;
+  --teal: #39B6B0;
+  --green: #486D5F;
+}
+
+body {
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  background-color: #e4e5e5;
+}
+
+#modal-base {
+  position: relative;
+}
+#modal-base .modal {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+#modal-base .modal .modal-content {
+  background-color: #fefefe;
+  border: 1px solid #888;
+  width: 70%;
+  /* Could be more or less, depending on screen size */
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+#modal-base .modal .modal-content .close {
+  margin: 15px;
+  align-self: end;
+  width: 30px;
+  height: 30px;
+  color: #fefefe;
+  border: none;
+  border-radius: 5px;
+  background-color: red;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 300ms ease-in-out;
+}
+#modal-base .modal .modal-content .close:hover, #modal-base .modal .modal-content .close:focus {
+  color: white;
+  width: 33px;
+  height: 33px;
+  font-size: 25px;
+  text-decoration: none;
+  cursor: pointer;
+}
+#modal-base .modal .modal-content .modal-body {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-content {
+  display: flex;
+  height: 100%;
+  margin-left: 10%;
+  margin-right: 10%;
+  flex-direction: column;
+  padding-top: 100px;
+}
+.page-content .page-title {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.page-content .btn {
+  border: none;
+  max-width: 95px;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: white;
+  background-color: var(--pink);
+  transition: all 300ms ease-in-out;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.page-content .btn:hover {
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
+}
+.page-content #high-scores {
+  width: 100%;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+.page-content #high-scores .heading {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  padding-bottom: 3px;
+  border-bottom: 2px solid #486D5F;
+  text-align: center;
+}
+.page-content #high-scores .high-score-entry {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.page-content #high-scores .high-score-entry .score-rank {
+  text-align: center;
+}
+.page-content #high-scores .high-score-entry .score-name {
+  text-align: center;
+}
+.page-content #high-scores .high-score-entry .score-points {
+  text-align: center;
+}
+
+/*# sourceMappingURL=high_scores.css.map */

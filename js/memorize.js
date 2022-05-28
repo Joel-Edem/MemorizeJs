@@ -285,10 +285,6 @@ window.addEventListener('load', () => {
     }
     return getHighScoreIndex(highScores) !== null
 
-
-    // when game ends get scores from storage ,
-    // check if current score matches . if has high score ,
-    // show modal to enter high score,
   }
 
   const getHighScoreIndex = (highScores) => {
