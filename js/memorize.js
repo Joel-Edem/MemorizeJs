@@ -39,8 +39,8 @@ window.addEventListener('load', () => {
   let SCORE = 0
   let NAME = ""
 
-  const hMarker = document.querySelector(".horizontal-marker")
-  const vMarker = document.querySelector(".vertical-marker")
+  // const hMarker = document.querySelector(".horizontal-marker")
+  // const vMarker = document.querySelector(".vertical-marker")
 
   const updateGameBardPerspective = (e) => {
     const rect = e.target.getBoundingClientRect()
@@ -73,7 +73,7 @@ window.addEventListener('load', () => {
 
   const start = () => {
     // shuffleArray(emojis) // shuffle emoji
-  GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className)
+    GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className)
 
     SCORE = 0
     updateScore(0)
@@ -86,24 +86,33 @@ window.addEventListener('load', () => {
       GAME_BOARD.appendChild(card.el)
     })
     const rect = GAME_BOARD.getBoundingClientRect()
-    const card_rect =GAME_BOARD.querySelector('.card').getBoundingClientRect()
+    const card_rect = GAME_BOARD.querySelector('.card').getBoundingClientRect()
     // vMarker.style.left = `${((window.innerWidth-(rect.x + rect.width / 2))/window.innerWidth)*100}%`
     // hMarker.style.top = `${rect.y + rect.height}px`
-    const xPos = `${((((rect.x + (rect.width / 2))-card_rect.width/2)/window.innerWidth))*100}%`
-    const yPos = `${((rect.y + rect.height)/window.innerHeight)*100}%`
+    const xPos = `${((((rect.x + (rect.width / 2)) - card_rect.width / 2) / window.innerWidth)) * 100}%`
+    const yPos = `${((rect.y + rect.height) / window.innerHeight) * 100}%`
     gsap.fromTo('.card', {
       top: yPos,
-      margin:0,
+      margin: 0,
       position: "absolute",
       left: xPos,
       duration: 1.5,
-      minWidth:"7vw",
-      minHeight:"17vh",
+      minWidth: "7vw",
+      minHeight: "17vh",
       boxShadow: 'rgba(50, 50, 93, 0.025) 0 13px 27px -5px, rgba(0, 0, 0, 0.003) 0px 8px 16px -8px;'
 
-    }, {top: 'auto',  stagger: .1,position: "relative",left:"auto", margin:"5%",  minWidth:"auto",width:"auto",
-      height:"auto", minHeight: "auto", boxShadow: 'rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'})
-
+    }, {
+      top: 'auto',
+      stagger: .1,
+      position: "relative",
+      left: "auto",
+      margin: "5%",
+      minWidth: "auto",
+      width: "auto",
+      height: "auto",
+      minHeight: "auto",
+      boxShadow: 'rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'
+    })
 
 
     // showHighScoreUserModal()
@@ -296,7 +305,6 @@ window.addEventListener('load', () => {
     //shuffle cards and choose num according to level
     shuffleArray(OPTIONS.themes[THEME].emojis)
     EMOJIS = OPTIONS.themes[THEME].emojis.slice(0, OPTIONS.level_options[LEVEL].numCards)
-    console.log(OPTIONS.level_options[LEVEL].numCards - 1)
     const els = []
     EMOJIS.forEach((emoji) => {//create cards
       for (let i = 0; i < 2; i++) {

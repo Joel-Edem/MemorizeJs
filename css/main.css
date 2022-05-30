@@ -1,4 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap");
 * {
   box-sizing: border-box;
   padding: 0;
@@ -12,6 +15,9 @@
   --lime: #B2E30A;
   --teal: #39B6B0;
   --green: #486D5F;
+  --default-font: "Caveat", cursive;
+  --font-alt: "Yanone Kaffeesatz", sans-serif;
+  --alt-2: "Caveat", cursive;
 }
 
 body {
@@ -87,6 +93,11 @@ a {
   align-content: center;
   width: 100%;
   height: 100%;
+}
+.main .page-banner {
+  font-family: var(--default-font);
+  font-weight: 900;
+  font-size: max(6rem, 30px);
 }
 .main .option-container {
   display: flex;

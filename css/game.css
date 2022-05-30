@@ -1,4 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap");
 * {
   box-sizing: border-box;
   padding: 0;
@@ -12,6 +15,9 @@
   --lime: #B2E30A;
   --teal: #39B6B0;
   --green: #486D5F;
+  --default-font: "Caveat", cursive;
+  --font-alt: "Yanone Kaffeesatz", sans-serif;
+  --alt-2: "Caveat", cursive;
 }
 
 body {
@@ -133,9 +139,10 @@ body {
   position: relative;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  min-height: 80vh;
   height: auto;
   width: 100%;
-  max-width: 40vmax;
+  max-width: 50vw;
   min-width: 200px;
 }
 .game-screen #game-board.easy {
@@ -147,6 +154,7 @@ body {
   grid-template-rows: repeat(auto-fill, minmax(auto, 20%));
 }
 .game-screen #game-board.hard {
+  aspect-ratio: unset;
   grid-template-columns: repeat(auto-fill, minmax(calc(100%/6), 1fr));
   grid-template-rows: repeat(auto-fill, minmax(auto, 20%));
 }
@@ -157,6 +165,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 4px solid #39B6B0;
   box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   min-width: 40px;
   min-height: 80px;
@@ -173,6 +182,10 @@ body {
   pointer-events: none;
   opacity: 0;
   transition: opacity 500ms ease-out 100ms;
+}
+.game-screen .card.is-face-up {
+  background-color: white;
+  border: none;
 }
 .game-screen .card.is-face-up .emoji {
   opacity: 100%;
