@@ -28,7 +28,7 @@ window.addEventListener('load', () => {
     level_options: {
       0: {name: "Easy", className: "easy", numCards: 8},
       1: {name: "Medium", className: "medium", numCards: 10},
-      2: {name: "Hard", className: "hard", numCards: 12}
+      2: {name: "Hard", className: "hard", numCards: 15}
     }
   }
 
@@ -39,10 +39,42 @@ window.addEventListener('load', () => {
   let SCORE = 0
   let NAME = ""
 
+  const hMarker = document.querySelector(".horizontal-marker")
+  const vMarker = document.querySelector(".vertical-marker")
+
+  const updateGameBardPerspective = (e) => {
+    const rect = e.target.getBoundingClientRect()
+    const xPos = rect.x + (rect.width / 2)
+    const yPos = rect.y + (rect.height / 2)
+    const xOrigin = 100 - (((window.innerWidth - xPos) / window.innerWidth) * 100)
+    const yOrigin = 100 - (((window.innerHeight - yPos) / window.innerHeight) * 100)
+
+    GAME_BOARD.style.perspectiveOrigin = `${xOrigin}% ${yOrigin}%`
+  }
+  const animateCards = (e) => {
+    const cardId = e.target.id
+    const rect = e.target.getBoundingClientRect()
+    const xPos = rect.x + (rect.width / 2)
+    const yPos = rect.y + (rect.height / 2)
+    const xAxis = (xPos - e.pageX) / 10
+    const yAxis = (yPos - e.pageY) / 10
+    if (!CARDS[cardId].isFaceUp) {
+      updateGameBardPerspective(e)
+      GAME_BOARD.style.perspective = '12vw'
+    }
+
+    e.target.style.transform = `rotateY(${yAxis}deg) rotateX(${xAxis}deg)`
+  }
+  const flipCard = (e) => {
+    updateGameBardPerspective(e)
+    GAME_BOARD.style.perspective = '100vw'
+    e.target.style.transform = `rotateY(-180deg)`
+  }
 
   const start = () => {
     // shuffleArray(emojis) // shuffle emoji
-    GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className) // todo change difficulties
+  GAME_BOARD.classList.add(OPTIONS.level_options[LEVEL].className)
+
     SCORE = 0
     updateScore(0)
     const card_els = createCards()
@@ -53,6 +85,27 @@ window.addEventListener('load', () => {
       CARDS[`${id}`] = card
       GAME_BOARD.appendChild(card.el)
     })
+    const rect = GAME_BOARD.getBoundingClientRect()
+    const card_rect =GAME_BOARD.querySelector('.card').getBoundingClientRect()
+    // vMarker.style.left = `${((window.innerWidth-(rect.x + rect.width / 2))/window.innerWidth)*100}%`
+    // hMarker.style.top = `${rect.y + rect.height}px`
+    const xPos = `${((((rect.x + (rect.width / 2))-card_rect.width/2)/window.innerWidth))*100}%`
+    const yPos = `${((rect.y + rect.height)/window.innerHeight)*100}%`
+    gsap.fromTo('.card', {
+      top: yPos,
+      margin:0,
+      position: "absolute",
+      left: xPos,
+      duration: 1.5,
+      minWidth:"7vw",
+      minHeight:"17vh",
+      boxShadow: 'rgba(50, 50, 93, 0.025) 0 13px 27px -5px, rgba(0, 0, 0, 0.003) 0px 8px 16px -8px;'
+
+    }, {top: 'auto',  stagger: .1,position: "relative",left:"auto", margin:"5%",  minWidth:"auto",width:"auto",
+      height:"auto", minHeight: "auto", boxShadow: 'rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'})
+
+
+
     // showHighScoreUserModal()
   }
 
@@ -74,11 +127,18 @@ window.addEventListener('load', () => {
     updateScore(round_score)
   }
 
+  const updateCardScore = (card_id) => {
+    if (CARDS[card_id].isFaceUp && CARDS[card_id].attempts > 1) {
+      CARDS[card_id].attempts -= 1
+    }
+  }
+
   const handleClick = (e) => {
     const card_id = e.target.id
     if (!CARDS[card_id].isFaceUp) {
       clearSelected(card_id)
       toggleFaceUp(card_id)
+      updateCardScore(card_id)
       const matches = checkMatches()
       if (matches) {
         const gameOver = checkGameOver()
@@ -156,7 +216,11 @@ window.addEventListener('load', () => {
         SELECTED.forEach((card_id) => {
           CARDS[card_id].isMatched = true
           CARDS[card_id].el.removeEventListener("click", handleClick)
-          CARDS[card_id].el.classList.add("matched")
+          // CARDS[card_id].el.style.transition = "opacity 350ms ease-out 1s"
+          // CARDS[card_id].el.classList.add("matched")
+          // window.requestAnimationFrame(()=> )
+          window.setTimeout(_ => CARDS[card_id].el.classList.add("matched"), 500)
+
         })
 
         calculateScore()
@@ -179,17 +243,53 @@ window.addEventListener('load', () => {
 
   const toggleFaceUp = (card_id) => {
     CARDS[card_id].isFaceUp = !CARDS[card_id].isFaceUp
-    CARDS[card_id].el.querySelector(".emoji").innerHTML = CARDS[card_id].isFaceUp ? CARDS[card_id].emoji : ""
-    if (CARDS[card_id].isFaceUp && CARDS[card_id].attempts > 1) {
-      CARDS[card_id].attempts -= 1
+    CARDS[card_id].isFaceUp ?
+      CARDS[card_id].el.classList.add("is-face-up") :
+      CARDS[card_id].el.classList.remove("is-face-up")
+    // todo move to
+    const emoji = CARDS[card_id].el.querySelector(".emoji")
+    emoji.innerHTML = CARDS[card_id].isFaceUp ? CARDS[card_id].emoji : ""
+    emoji.style.transform = `rotateY(180deg)`
+
+  }
+
+  const handleMouseLeave = (e) => {
+    const card_id = e.target.id
+    e.target.removeEventListener("mousemove", animateCards)
+    e.target.removeEventListener("mouseleave", handleMouseLeave)
+    if (!CARDS[card_id].isFaceUp) {
+      e.target.style.transition = "all 0.5s ease"
+      e.target.style.transform = `rotateY(0deg) rotateX(0deg)`
     }
+
+  }
+  const handleMouseEnter = (e) => {
+    const card_id = e.target.id
+    if (!CARDS[card_id].isFaceUp) {
+      e.target.style.transition = "none"
+      e.target.addEventListener("mouseleave", handleMouseLeave)
+      e.target.addEventListener("mousemove", animateCards)
+    }
+  }
+
+  const handleCardClick = (e) => {
+    e.target.removeEventListener("mousemove", animateCards)
+    e.target.removeEventListener("mouseleave", handleMouseLeave)
+    e.target.style.transition = "all 0.3s ease"
+    flipCard(e)
+
   }
 
   const createCardElement = (emoji) => {
     const el = document.createElement('div')
     el.classList.add(`card`)
     el.innerHTML = `<span class="emoji">${emoji}</span>`
+
+    el.addEventListener("mouseenter", handleMouseEnter)
+    // el.addEventListener("mouseleave", handleMouseLeave)
+    el.addEventListener("click", handleCardClick)
     return el
+
   }
 
   const createCards = (faceUp = false) => {
@@ -266,14 +366,39 @@ window.addEventListener('load', () => {
       </div>
     </div>
     `
-    // todo add form to track high scores
 
     const {open, modal, close} = createModal(innerHtml)
     modal.querySelector('.restart-btn')
-      .addEventListener('click', ()=>{
+      .addEventListener('click', () => {
         close()
-        restart()})
+        restart()
+      })
     open()
+  }
+
+  const getHighScoreIndex = (highScores) => {
+    let newHighScoreIdx = null;
+    // find index of high score
+    if (!highScores.length) return 0;
+
+    for (let i = 0; i < highScores.length; i++) {
+      console.log(`calculating hi score idx i=${i}`)
+      if (SCORE >= highScores[i].score) {
+        newHighScoreIdx = i;
+        console.log(`calculating hi score idx cur score greater than cur idx`)
+        return i
+        // for (let j = i + 1; j < highScores.length; j++) {
+        //   if (highScores[j].score === highScores[i].score) {
+        //     newHighScoreIdx = j
+        //   } else {
+        //     break
+        //   }
+        // }
+        // break
+      }
+    }
+
+    return newHighScoreIdx
   }
 
   const hasHighScore = () => {
@@ -283,35 +408,17 @@ window.addEventListener('load', () => {
     if (highScores.length < 10) {
       return true
     }
-    return getHighScoreIndex(highScores) !== null
+    return getHighScoreIndex(highScores) != null
 
   }
 
-  const getHighScoreIndex = (highScores) => {
-    let newHighScoreIdx = null;
-    // find index of high score
-    if (!highScores.length) return 0;
-
-    for (let i = 0; i < highScores.length; i++) {
-      if (SCORE >= highScores[i].score) {
-        newHighScoreIdx = i;
-        for (let j = i + 1; j < highScores.length; j++) {
-          if (highScores[j].score === highScores[i].score) {
-            newHighScoreIdx = j
-          } else {
-            break
-          }
-        }
-        break
-      }
-    }
-
-    return newHighScoreIdx
-  }
 
   const setHighScore = (name) => {
     const highScores = JSON.parse(localStorage.getItem("HIGH_SCORES")) || []
     const highScoreIdx = getHighScoreIndex(highScores)
+    console.log(`High Score => ${highScores}`)
+    console.log(highScores)
+    console.log(highScoreIdx)
     highScores.splice(highScoreIdx, 0, {name: name, score: SCORE})
     if (highScores.length > 10) highScores.pop();
     localStorage.setItem("HIGH_SCORES", JSON.stringify(highScores))
@@ -326,6 +433,7 @@ window.addEventListener('load', () => {
   }
 
   start()
+
 
 })
 

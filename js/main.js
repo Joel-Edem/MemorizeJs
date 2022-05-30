@@ -132,4 +132,3 @@ window.addEventListener('load', () => {
 
 })
 
-// todo close modal on level restart

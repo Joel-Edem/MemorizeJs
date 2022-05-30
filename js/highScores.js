@@ -3,9 +3,9 @@ window.addEventListener('load', () => {
 
   const loadHighScores = () => {
     const highScores = JSON.parse(localStorage.getItem("HIGH_SCORES")) || []
-    for (let i = highScores.length - 1; i >= 0; i--) {
+    for (let i =0; i< highScores.length; i++) {
       const entry = highScores[i]
-      entry.rank = highScores.length - i
+      entry.rank = i+1
       createHighScoreEl(entry)
     }
   }
