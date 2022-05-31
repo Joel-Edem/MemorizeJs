@@ -15,6 +15,7 @@
   --lime: #B2E30A;
   --teal: #39B6B0;
   --green: #486D5F;
+  --light:#e4e5e5;
   --default-font: "Caveat", cursive;
   --font-alt: "Yanone Kaffeesatz", sans-serif;
   --alt-2: "Caveat", cursive;
@@ -27,7 +28,7 @@ body {
 a {
   text-decoration: none;
   color: black;
-  background-color: #e4e5e5;
+  background-color: var(--light);
 }
 
 #modal-base {
@@ -85,6 +86,64 @@ a {
   align-items: center;
 }
 
+@keyframes textAnimate {
+  0% {
+    stroke-dasharray: 0 50%;
+    stroke-dashoffset: 20%;
+    fill: rgba(250, 75, 136, 0.3);
+  }
+  100% {
+    stroke-dasharray: 50% 0;
+    stroke-dashoffset: 0;
+    fill: #fa2570;
+  }
+}
+@keyframes slide-up {
+  0% {
+    opacity: 100%;
+    transform: translateY(0);
+  }
+  80% {
+    width: 100%;
+  }
+  100% {
+    transform: translateY(-100%);
+    width: 0;
+    opacity: 0;
+  }
+}
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 10000;
+  animation: slide-up 0.8s forwards 1.5s ease-out;
+}
+#splash-screen .logo-parent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+#splash-screen .logo-parent #logo-svg {
+  stroke: #F92670;
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+  animation: textAnimate 1.5s forwards;
+}
+
+.page-banner {
+  font-family: var(--default-font);
+  font-weight: 900;
+  font-size: max(6rem, 30px);
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -93,11 +152,6 @@ a {
   align-content: center;
   width: 100%;
   height: 100%;
-}
-.main .page-banner {
-  font-family: var(--default-font);
-  font-weight: 900;
-  font-size: max(6rem, 30px);
 }
 .main .option-container {
   display: flex;

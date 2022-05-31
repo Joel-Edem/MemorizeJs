@@ -98,7 +98,8 @@ window.addEventListener('load', () => {
       left: xPos,
       duration: 1.5,
       minWidth: "7vw",
-      minHeight: "17vh",
+      aspectRatio: "2/3",
+      // minHeight: "17vh",
       boxShadow: 'rgba(50, 50, 93, 0.025) 0 13px 27px -5px, rgba(0, 0, 0, 0.003) 0px 8px 16px -8px;'
 
     }, {
@@ -108,9 +109,10 @@ window.addEventListener('load', () => {
       left: "auto",
       margin: "5%",
       minWidth: "auto",
-      width: "auto",
-      height: "auto",
-      minHeight: "auto",
+      aspectRatio: "unset",
+      // width: "auto",
+      // height: "auto",
+      // minHeight: "auto",
       boxShadow: 'rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'
     })
 

@@ -15,8 +15,10 @@
   --lime: #B2E30A;
   --teal: #39B6B0;
   --green: #486D5F;
+  --light:#e4e5e5;
   --default-font: 'Caveat', cursive;
   --font-alt: 'Yanone Kaffeesatz', sans-serif;
+
   //--alt-2:  'Shadows Into Light', cursive;
   --alt-2: 'Caveat', cursive;
 
@@ -29,7 +31,7 @@ body{
 a{
   text-decoration: none;
   color: black;
-  background-color: #e4e5e5;
+  background-color:var(--light);
 }
 
 #modal-base {
