@@ -41,14 +41,16 @@ window.addEventListener('load', () => {
   }
 
   const LEVEL_OPTIONS = {
-    0: {name: "Easy", icon: ""},
-    1: {name: "Medium", icon: ""},
-    2: {name: "Hard", icon: ""}
+    0: {name: "Easy", icon: "😅"},
+    1: {name: "Medium", icon: "😳"},
+    2: {name: "Hard", icon: "😭"}
   }
   const THEME_OPTIONS = {
-    0: {name: "Flags", icon: ""},
-    1: {name: "Halloween", icon: ''},
-    2: {name: "Vehicles", icon: ""}
+    0: {name: "Flags", icon: "🚩"},
+    1: {name: "Halloween", icon: '🎃'},
+    2: {name: "Vehicles", icon: "⛵️"},
+    3: {name: "Foods", icon: "🍲"},
+    4: {name: "Animals", icon: "🐣"}
   }
 
   let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 0)
@@ -65,7 +67,8 @@ window.addEventListener('load', () => {
             ${Object.keys(LEVEL_OPTIONS).map((key) => {
       return `
                 <p class="lv-opt ${key === `${LEVEL}` ? "show" : ''}" id=lv-${key}-opt >
-                  ${LEVEL_OPTIONS[key].name}
+                  ${LEVEL_OPTIONS[key].name} 
+                  <span class="theme-icon">${LEVEL_OPTIONS[key].icon}</span>
                 </p>`
     }).join(" ")}
         </div>
@@ -108,7 +111,7 @@ window.addEventListener('load', () => {
     if (e.target.classList.contains('left')) {
       if (--LEVEL < 0) LEVEL = Object.keys(LEVEL_OPTIONS).length - 1;
     } else {
-      if (++LEVEL > Object.keys(LEVEL_OPTIONS).length-1) LEVEL = 0;
+      if (++LEVEL > Object.keys(LEVEL_OPTIONS).length - 1) LEVEL = 0;
     }
     document.querySelector(`#lv-${prev_level}-opt`).classList.remove("show")
     document.querySelector(`#lv-${LEVEL}-opt`).classList.add("show")
@@ -120,7 +123,7 @@ window.addEventListener('load', () => {
     if (e.target.classList.contains('left')) {
       if (--THEME < 0) THEME = Object.keys(THEME_OPTIONS).length - 1;
     } else {
-      if (++THEME > Object.keys(THEME_OPTIONS).length-1) THEME = 0;
+      if (++THEME > Object.keys(THEME_OPTIONS).length - 1) THEME = 0;
     }
     document.querySelector(`#theme-${prev_theme}-opt`).classList.remove("show")
     document.querySelector(`#theme-${THEME}-opt`).classList.add("show")
@@ -129,6 +132,10 @@ window.addEventListener('load', () => {
   }
 
   changeOptionsBtn.addEventListener('click', showOptionsModal)
+  const SPLASH_SCREEN = document.querySelector("#splash-screen")
+  SPLASH_SCREEN.addEventListener("click", () => {
+    SPLASH_SCREEN.getAnimations().forEach((animation)=>{animation.finish()})
+  })
 
 })
 
