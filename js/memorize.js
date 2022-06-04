@@ -1,3 +1,4 @@
+
 window.addEventListener('load', () => {
   let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 0)
   let THEME = JSON.parse(localStorage.getItem("THEME") || 0)
@@ -37,9 +38,9 @@ window.addEventListener('load', () => {
       }
     },
     level_options: {
-      0: {name: "Easy", className: "easy", numCards: 8},
-      1: {name: "Medium", className: "medium", numCards: 10},
-      2: {name: "Hard", className: "hard", numCards: 15}
+      0: {name: "Easy", className: "easy", numCards: 8, },
+      1: {name: "Medium", className: "medium", numCards: 10,},
+      2: {name: "Hard", className: "hard", numCards: 15, totalTime: 10000, maxAttempts: 4}
     }
   }
 
@@ -69,7 +70,8 @@ window.addEventListener('load', () => {
     const yPos = rect.y + (rect.height / 2)
     const xAxis = (xPos - e.pageX) / 10
     const yAxis = (yPos - e.pageY) / 10
-    if (!CARDS[cardId].isFaceUp) {
+    if (cardId && !CARDS[cardId]?.isFaceUp) {
+
       updateGameBardPerspective(e)
       GAME_BOARD.style.perspective = '12vw'
     }
@@ -96,12 +98,19 @@ window.addEventListener('load', () => {
       CARDS[`${id}`] = card
       GAME_BOARD.appendChild(card.el)
     })
-    const rect = GAME_BOARD.getBoundingClientRect()
-    const card_rect = GAME_BOARD.querySelector('.card').getBoundingClientRect()
+    startAnimation()
     // vMarker.style.left = `${((window.innerWidth-(rect.x + rect.width / 2))/window.innerWidth)*100}%`
     // hMarker.style.top = `${rect.y + rect.height}px`
+
+
+    // showHighScoreUserModal()
+  }
+  const startAnimation = () => {
+    const rect = GAME_BOARD.getBoundingClientRect()
+    const card_rect = GAME_BOARD.querySelector('.card').getBoundingClientRect()
     const xPos = `${((((rect.x + (rect.width / 2)) - card_rect.width / 2) / window.innerWidth)) * 100}%`
     const yPos = `${((rect.y + rect.height) / window.innerHeight) * 100}%`
+
     gsap.fromTo('.card', {
       top: yPos,
       margin: 0,
@@ -126,11 +135,7 @@ window.addEventListener('load', () => {
       // minHeight: "auto",
       boxShadow: 'rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px'
     })
-
-
-    // showHighScoreUserModal()
   }
-
   const checkGameOver = () => {
     return Object.values(CARDS).reduce((prev, cur) => {
       if (!prev) return false;
@@ -145,27 +150,91 @@ window.addEventListener('load', () => {
   }
 
   const calculateScore = () => {
-    const round_score = CARDS[SELECTED[0]].attempts + CARDS[SELECTED[1]].attempts
-    updateScore(round_score)
-  }
+    let calculatedScore = 0
+    switch (LEVEL) {
+      case 0:
+        SELECTED.forEach((card_id) => {
+          calculatedScore += 1 // for easy add one each time
+          numAnimation(CARDS[card_id].el, 1)
+        })
+        break
+      case 2:
+        SELECTED.forEach((card_id) => {
+          calculatedScore += (CARDS[card_id].checkPoints.length +1)
+          numAnimation(CARDS[card_id].el, Math.round(CARDS[card_id].checkPoints.length +1))
+        })
+        break
 
-  const updateCardScore = (card_id) => {
-    if (CARDS[card_id].isFaceUp && CARDS[card_id].attempts > 1) {
-      CARDS[card_id].attempts -= 1
+      default:
+        SELECTED.forEach((card_id) => {
+          calculatedScore += CARDS[card_id].attempts
+          numAnimation(CARDS[card_id].el, CARDS[card_id].attempts)
+        })
+
     }
+    updateScore(calculatedScore)
   }
 
+  const updateAttempts = () => {
+    if (SELECTED.length === 2) {
+      switch (LEVEL) {
+        case 2:
+        case 0:
+          break
+        default:
+          SELECTED.forEach(card_id => {
+            if (CARDS[card_id].isFaceUp && CARDS[card_id].attempts > 1) {
+              CARDS[card_id].attempts -= 1
+              numAnimation(CARDS[card_id].el, -1)
+            }
+          })
+      }
+
+    }
+
+  }
+  const numAnimation = (card, num) => {
+
+    const rect = card.getBoundingClientRect()
+    const el = document.createElement('span')
+    el.classList.add("floating-anim", num < 0 ? "minus" : "plus")
+    el.innerText = `${num > 0 ? "+" : ''}${num}`
+    el.style.transform = `rotateY(-180deg)`
+
+    card.appendChild(el)
+    const handleComplete = () => {
+      if (num > 0) {
+        setTimeout(_ => card.classList.add("matched"), 1000)
+      }
+    }
+    gsap.to(el, {
+      duration: 2,
+      delay: .2,
+      x: `-=${rect.width / 2}px`,
+      y: `-=${rect.height / 2}px`,
+      fontSize: num > 0 ? "2rem" : "initial",
+      fontWeight: num > 0 ? "800" : "initial",
+      opacity: 0,
+      oncomplete: handleComplete
+    })
+    setTimeout(() => {
+      el.remove()
+    }, 2000)
+  }
   const handleClick = (e) => {
     const card_id = e.target.id
     if (!CARDS[card_id].isFaceUp) {
       clearSelected(card_id)
       toggleFaceUp(card_id)
-      updateCardScore(card_id)
       const matches = checkMatches()
       if (matches) {
-        const gameOver = checkGameOver()
-        if (gameOver) handleGameOver();
+        calculateScore()
+        const hasGameOver = checkGameOver()
+        if (hasGameOver) handleGameOver();
+      } else {
+        updateAttempts()
       }
+
     }
   }
 
@@ -208,7 +277,6 @@ window.addEventListener('load', () => {
   const handleHighScoreFormSubmit = () => {
     const el = document.querySelector("#user-name")
     NAME = el.value
-    console.log(NAME)
     if (!NAME) return false
     el.value = ""
     setHighScore(NAME)
@@ -238,16 +306,8 @@ window.addEventListener('load', () => {
         SELECTED.forEach((card_id) => {
           CARDS[card_id].isMatched = true
           CARDS[card_id].el.removeEventListener("click", handleClick)
-          // CARDS[card_id].el.style.transition = "opacity 350ms ease-out 1s"
-          // CARDS[card_id].el.classList.add("matched")
-          // window.requestAnimationFrame(()=> )
-          window.setTimeout(_ => CARDS[card_id].el.classList.add("matched"), 500)
-
         })
 
-        calculateScore()
-        // console.log("MATCHED!")
-        SELECTED = []
         return true
       }
       return false
@@ -268,10 +328,90 @@ window.addEventListener('load', () => {
     CARDS[card_id].isFaceUp ?
       CARDS[card_id].el.classList.add("is-face-up") :
       CARDS[card_id].el.classList.remove("is-face-up")
-    // todo move to
     const emoji = CARDS[card_id].el.querySelector(".emoji")
+
     emoji.innerHTML = CARDS[card_id].isFaceUp ? CARDS[card_id].emoji : ""
     emoji.style.transform = `rotateY(180deg)`
+    if (CARDS[card_id].isFaceUp && OPTIONS.level_options[LEVEL].totalTime) showCountDownTimer(card_id);
+
+  }
+  // noinspection JSSuspiciousNameCombination
+  const showCountDownTimer = (card_id) => {
+    let canvas
+    if (CARDS[card_id].el.querySelector('.count-down-timer')) {
+      canvas = CARDS[card_id].el.querySelector('.count-down-timer')
+    } else {
+      canvas = document.createElement('canvas')
+      const cardRect = CARDS[card_id].el.getBoundingClientRect()
+      canvas.x = cardRect.x + cardRect.width / 2
+      canvas.y = cardRect.y + cardRect.height / 2
+      canvas.width = cardRect.width
+      // noinspection JSSuspiciousNameCombination
+      canvas.height = cardRect.width
+
+      canvas.classList.add("count-down-timer")
+      CARDS[card_id].el.appendChild(canvas)
+    }
+    window.requestAnimationFrame(() => {
+      drawWedge(canvas, card_id)
+    })
+
+
+  }
+  const getEndAngle = (card_id) => {
+    // return 2*Math.PI * .7
+    return 2 * Math.PI * (CARDS[card_id].timeLeft / OPTIONS.level_options[LEVEL].totalTime)
+  }
+
+  const setCheckPoints = () => {
+    const numSplits = 100 / (OPTIONS.level_options[LEVEL].maxAttempts || 3)
+    const checks = []
+
+    for (let i = 1; i < (OPTIONS.level_options[LEVEL].maxAttempts || 3); i++) {
+      const val = i * Math.round(numSplits)
+      checks.push(val)
+    }
+    return checks
+  }
+
+  function drawWedge(canvas, card_id) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    ctx.fillStyle = "rgba(148,222,235,0.5)";
+    ctx.strokeStyle = "rgba(250,37,112,0.6)";
+    ctx.lineWidth = .5;
+
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, canvas.height / 2);
+    ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 3, 0, getEndAngle(card_id));
+    ctx.closePath();
+
+    ctx.fill();
+    ctx.stroke();
+    if (CARDS[card_id].isFaceUp && (CARDS[card_id].timeLeft > 0) && (!CARDS[card_id].isMatched)) {
+
+      const remainingPercent = Math.round((CARDS[card_id].timeLeft / OPTIONS.level_options[LEVEL].totalTime) * 100)
+      if (CARDS[card_id].checkPoints.includes(remainingPercent)) {
+        console.log("adding")
+        const checkPoint = CARDS[card_id].checkPoints.indexOf(remainingPercent);
+        if (checkPoint > -1) {
+          CARDS[card_id].checkPoints.splice(checkPoint, 1);
+        }
+        numAnimation(CARDS[card_id].el, -1)
+      }
+
+      setTimeout(() => {
+        CARDS[card_id].timeLeft -= 30
+        window.requestAnimationFrame(() => {
+          drawWedge(canvas, card_id)
+        })
+      }, 30)
+
+    } else {
+      canvas.remove()
+    }
+
 
   }
 
@@ -325,7 +465,9 @@ window.addEventListener('load', () => {
           emoji: emoji,
           isFaceUp: false,
           isMatched: false,
-          attempts: 4,
+          attempts: OPTIONS.level_options[LEVEL].maxAttempts || 3,
+          timeLeft: OPTIONS.level_options[LEVEL].totalTime,
+          checkPoints: OPTIONS.level_options[LEVEL].totalTime ? setCheckPoints() : [],
           el: createCardElement(faceUp ? emoji : "")
         })
       }
@@ -408,14 +550,6 @@ window.addEventListener('load', () => {
         newHighScoreIdx = i;
         console.log(`calculating hi score idx cur score greater than cur idx`)
         return i
-        // for (let j = i + 1; j < highScores.length; j++) {
-        //   if (highScores[j].score === highScores[i].score) {
-        //     newHighScoreIdx = j
-        //   } else {
-        //     break
-        //   }
-        // }
-        // break
       }
     }
 
@@ -437,9 +571,6 @@ window.addEventListener('load', () => {
   const setHighScore = (name) => {
     const highScores = JSON.parse(localStorage.getItem("HIGH_SCORES")) || []
     const highScoreIdx = getHighScoreIndex(highScores)
-    console.log(`High Score => ${highScores}`)
-    console.log(highScores)
-    console.log(highScoreIdx)
     highScores.splice(highScoreIdx, 0, {name: name, score: SCORE})
     if (highScores.length > 10) highScores.pop();
     localStorage.setItem("HIGH_SCORES", JSON.stringify(highScores))

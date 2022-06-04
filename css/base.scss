@@ -35,7 +35,8 @@ a{
 }
 
 #modal-base {
-  position: relative;
+  position: absolute;
+  z-index: 999999;
 
   .modal {
     display: grid;

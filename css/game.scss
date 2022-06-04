@@ -138,6 +138,26 @@ body {
       pointer-events: none;
       opacity: 0;
       transition: opacity 500ms ease-out 100ms;
+      z-index: 9;
+      position: relative;
+    }
+    .count-down-timer{
+      position: absolute;
+      z-index: 1;
+      fill: #F92670;
+      display: none;
+      //transform: rotateX(180deg);
+      //transition: all 500ms ease-in;
+
+    }
+    .floating-anim{
+      position: absolute;
+      &.minus{
+        color: red;
+      }
+      &.plus{
+        color: var(--green);
+      }
 
     }
 
@@ -146,7 +166,9 @@ body {
       border: none;
       .emoji {
         opacity: 100%;
-
+      }
+      .count-down-timer{
+        display: block;
       }
     }
 

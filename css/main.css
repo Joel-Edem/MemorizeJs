@@ -32,7 +32,8 @@ a {
 }
 
 #modal-base {
-  position: relative;
+  position: absolute;
+  z-index: 999999;
 }
 #modal-base .modal {
   display: grid;
@@ -98,6 +99,24 @@ a {
     fill: #fa2570;
   }
 }
+@keyframes colorAnimate {
+  0% {
+    stroke-dasharray: 0 50%;
+    stroke-dashoffset: 20%;
+    fill: #94deeb;
+  }
+  50% {
+    fill: rgba(148, 222, 235, 0.1);
+  }
+  80% {
+    fill: rgba(250, 75, 136, 0.5);
+  }
+  100% {
+    stroke-dasharray: 50% 0;
+    stroke-dashoffset: 0;
+    fill: #F92670;
+  }
+}
 @keyframes slide-up {
   0% {
     opacity: 100%;
@@ -112,6 +131,23 @@ a {
     opacity: 0;
   }
 }
+.logo-parent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-parent {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
 #splash-screen {
   position: fixed;
   top: 0;
@@ -122,16 +158,7 @@ a {
   z-index: 10000;
   animation: slide-up 0.8s forwards 1.5s ease-out;
 }
-#splash-screen .logo-parent {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-}
-#splash-screen .logo-parent #logo-svg {
+#splash-screen #logo-svg {
   stroke: #F92670;
   stroke-width: 3;
   stroke-miterlimit: 10;
@@ -144,7 +171,16 @@ a {
   font-size: max(6rem, 30px);
 }
 
+#logo-svg-header {
+  stroke: #F92670;
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+  animation: colorAnimate 5s infinite alternate;
+}
+
 .main {
+  position: absolute;
+  z-index: 9;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -179,6 +215,27 @@ a {
 }
 .main .option-container .home-btn:hover {
   background-color: var(--pink);
+}
+
+.custom-shape-divider-top-1654147073 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1654147073 svg {
+  position: relative;
+  display: block;
+  width: calc(156% + 1.3px);
+  height: 366px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1654147073 .shape-fill {
+  fill: rgba(147, 222, 235, 0.3);
 }
 
 .opts-modal {

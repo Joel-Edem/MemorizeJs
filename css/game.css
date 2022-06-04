@@ -32,7 +32,8 @@ a {
 }
 
 #modal-base {
-  position: relative;
+  position: absolute;
+  z-index: 999999;
 }
 #modal-base .modal {
   display: grid;
@@ -191,6 +192,23 @@ body {
   pointer-events: none;
   opacity: 0;
   transition: opacity 500ms ease-out 100ms;
+  z-index: 9;
+  position: relative;
+}
+.game-screen .card .count-down-timer {
+  position: absolute;
+  z-index: 1;
+  fill: #F92670;
+  display: none;
+}
+.game-screen .card .floating-anim {
+  position: absolute;
+}
+.game-screen .card .floating-anim.minus {
+  color: red;
+}
+.game-screen .card .floating-anim.plus {
+  color: var(--green);
 }
 .game-screen .card.is-face-up {
   background-color: white;
@@ -198,6 +216,9 @@ body {
 }
 .game-screen .card.is-face-up .emoji {
   opacity: 100%;
+}
+.game-screen .card.is-face-up .count-down-timer {
+  display: block;
 }
 .game-screen .card.matched {
   opacity: 0;
