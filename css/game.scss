@@ -105,6 +105,11 @@ body {
     }
 
     &.hard {
+      .card{
+        .emoji{
+          font-size: 2em;
+        }
+      }
       aspect-ratio: 3/4;
       grid-template-columns: repeat(auto-fill, minmax(calc(100%/6), 1fr));
       grid-template-rows: repeat(auto-fill, minmax(auto, 20%));
@@ -134,7 +139,7 @@ body {
 
 
     .emoji {
-      font-size: clamp(1em, 2em, 5em);
+      font-size: 3em;
       pointer-events: none;
       opacity: 0;
       transition: opacity 500ms ease-out 100ms;

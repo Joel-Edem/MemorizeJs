@@ -247,6 +247,9 @@ a {
   flex-direction: column;
   text-align: center;
 }
+.opts-modal .theme-icon {
+  font-size: 2rem;
+}
 .opts-modal .game-options {
   width: 100%;
   height: 100%;
@@ -286,6 +289,8 @@ a {
 }
 .opts-modal .game-options .difficulty-opts .lv-opt, .opts-modal .game-options .difficulty-opts .theme-opt, .opts-modal .game-options .theme-opts .lv-opt, .opts-modal .game-options .theme-opts .theme-opt {
   display: none;
+  font-weight: bolder;
+  font-size: 1.5em;
 }
 .opts-modal .game-options .difficulty-opts .lv-opt.show, .opts-modal .game-options .difficulty-opts .theme-opt.show, .opts-modal .game-options .theme-opts .lv-opt.show, .opts-modal .game-options .theme-opts .theme-opt.show {
   display: block;

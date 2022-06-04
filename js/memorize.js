@@ -378,8 +378,8 @@ window.addEventListener('load', () => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    ctx.fillStyle = "rgba(148,222,235,0.5)";
-    ctx.strokeStyle = "rgba(250,37,112,0.6)";
+    ctx.fillStyle ="rgba(250,37,112,0.3)";
+    ctx.strokeStyle =  "#FA2570FF";
     ctx.lineWidth = .5;
 
     ctx.beginPath();
