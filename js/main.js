@@ -25,7 +25,7 @@ window.addEventListener('load', () => {
       modal.remove()
     }
 
-
+    // noinspection DuplicatedCode
     const handleOutsideClick = (e) => {
       if (ignoreOutsideClick) return;
       if (e.target === modal && modal.classList.contains('open')) {
@@ -132,7 +132,9 @@ window.addEventListener('load', () => {
   }
 
   changeOptionsBtn.addEventListener('click', showOptionsModal)
+
   const SPLASH_SCREEN = document.querySelector("#splash-screen")
+
   SPLASH_SCREEN.addEventListener("click", () => {
     SPLASH_SCREEN.getAnimations().forEach((animation)=>{animation.finish()})
   })
