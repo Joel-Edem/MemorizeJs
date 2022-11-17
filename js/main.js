@@ -53,7 +53,7 @@ window.addEventListener('load', () => {
     4: {name: "Animals", icon: "🐣"}
   }
 
-  let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 0)
+  let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 2)
   let THEME = JSON.parse(localStorage.getItem("THEME") || 0)
 
   const showOptionsModal = () => {
@@ -72,7 +72,7 @@ window.addEventListener('load', () => {
                 </p>`
     }).join(" ")}
         </div>
-            <img src="../imgs/right-chevron.svg" class="right arrow" alt="right arrow"/>
+            <img src="./imgs/right-chevron.svg" class="right arrow" alt="right arrow"/>
       </div>
       
       <div class="theme-opt-container game-options">

@@ -1,7 +1,7 @@
 // noinspection JSUnresolvedVariable,JSUnresolvedFunction
 
 window.addEventListener('load', () => {
-  let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 0)
+  let LEVEL = JSON.parse(localStorage.getItem('LEVEL') || 2)
   let THEME = JSON.parse(localStorage.getItem("THEME") || 0)
   let GAME_BOARD = document.querySelector("#game-board")
   const SCORE_CARD = document.querySelector("#score-card")

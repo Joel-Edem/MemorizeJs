@@ -1,0 +1,24 @@
+{
+  "name": "memorize.js",
+  "version": "1.0.0",
+  "description": "Fun card matching puzzle game ",
+  "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html --open",
+    "start": "npm run build && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Joel-Edem/MemorizeJs.git"
+  },
+  "author": "Joel Edem Ametepeh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Joel-Edem/MemorizeJs/issues"
+  },
+  "homepage": "https://github.com/Joel-Edem/MemorizeJs#readme",
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  }
+}
