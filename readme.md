@@ -3,7 +3,7 @@
 Memorize Is a fun card matching game written in plain html and Javascript.
 
 ##How To Run
-1. You can play a live version here
+1. You can play a live version [here](https://Joel-Edem.github.io/MemorizeJs/)
 2. Clone this repo and run locally
 
 ##Running locally
